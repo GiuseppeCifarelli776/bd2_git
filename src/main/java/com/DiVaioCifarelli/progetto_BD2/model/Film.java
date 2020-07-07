@@ -1,6 +1,5 @@
 package com.DiVaioCifarelli.progetto_BD2.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;

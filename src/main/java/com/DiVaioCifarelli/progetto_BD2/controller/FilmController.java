@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.DiVaioCifarelli.progetto_BD2.model.Credits;
 import com.DiVaioCifarelli.progetto_BD2.model.Film;
-import com.DiVaioCifarelli.progetto_BD2.model.ResultTable;
+import com.DiVaioCifarelli.progetto_BD2.model.Genres;
+import com.DiVaioCifarelli.progetto_BD2.model.Production_countries;
 import com.DiVaioCifarelli.progetto_BD2.repository.CreditsRepository;
 import com.DiVaioCifarelli.progetto_BD2.repository.FilmRepository;
 

@@ -19,11 +19,11 @@
 	<thead>
 	<tr>
 		<th scope="col">Title</th> 
+		<th scope="col">Overview</th>
 		<th scope="col">Genres</th> 
 		<th scope="col">Production Companies</th>
 		<th scope="col">Production Countries</th>
 		<th scope="col">Release Date</th>
-		<th scope="col">Overview</th>
 		<th scope="col">Votes_Avg</th>
 	</tr>
 	</thead>
@@ -110,11 +110,11 @@
 				    {
 				         var tr  ="<tr>"+
 				                "<td>"+elenco[i]["Title"]+"</td>"+
+				                "<td>"+elenco[i]["Overview"]+"</td>"+
 				                "<td>"+elenco[i]["Genres"]+"</td>"+
 				                "<td>"+elenco[i]["Companyies"]+"</td>"+
 				                "<td>"+elenco[i]["Countries"]+"</td>"+
 				                "<td>"+elenco[i]["Release_Date"]+"</td>"+
-				                "<td>"+elenco[i]["Overview"]+"</td>"+
 				                "<td>"+elenco[i]["Votes_Avg"]+"</td></tr>";
 				       $("#mytable").append(tr);
 				    }
