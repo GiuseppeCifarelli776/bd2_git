@@ -8,44 +8,62 @@
 <title>Film DB</title>
 <style>
 	body{
-	
 		 background: url(wallpaper.png) no-repeat center center fixed; 
 		 -webkit-background-size: cover;
 		 -moz-background-size: cover;
 		 -o-background-size: cover;
 		 background-size: cover;
-        
         }
 </style>
 </head>
 <body>
-<div class="text-center" style="padding-top: 2%">
-  <img src="logo.png" class="rounded" alt="logo_unisa" style="height: 200px; width: 200px;">
-</div>
- 
-<div style="padding-left: 40%;padding-top: 2%;">
-<label for="desc" style="padding-left: 8%; font-size: 20px; color: white">Ricerca Film</label>
-<form action="/film/search" method="GET">
-  <div class="form-group">
-    <label for="title" style="color: white">Titolo:</label>
-	<input type="text" id="title" name="title"><br>
-  </div>
-  <div class="form-group">
-    <label for="genres" style="color: white">Genere:</label>
-	<input type="text" id="genres" name="genres"><br>
-  </div>
-  <div  class="form-group">
-  <label for="cast_component" style="color: white">Attore/Attrice:</label>
-	<input type="text" id="cast_component" name="cast_component"><br>
-  </div>
-  <div  class="form-group">
-  <label for="crew_component" style="color: white">Regista:</label>
-	<input type="text" id="crew_component" name="crew_component"><br>
-  </div>
-  <div style="padding-left: 12%">
-  	<button type="submit" class="btn btn-primary">Search!</button>
-  </div>
-</form>
-</div>
+	<div class="text-center" style="padding-top: 2%">
+	  <img src="logo.png" class="rounded" alt="logo_unisa" style="height: 200px; width: 200px;">
+	</div>
+	 
+	<div style="padding-left: 40%;padding-top: 2%;">
+		<label for="desc" style="padding-left: 8%; font-size: 20px; color: white">Ricerca Film</label>
+		<form action="/film/search" method="GET" name="field_search">
+		  <div class="form-group">
+		    <label for="title" style="color: white">Titolo:</label>
+			<input type="text" id="title" name="title"><br>
+		  </div>
+		  <div class="form-group">
+		    <label for="genres" style="color: white">Genere:</label>
+			<input type="text" id="genres" name="genres"><br>
+		  </div>
+		  <div  class="form-group">
+		  	<label for="cast_component" style="color: white">Attore/Attrice:</label>
+			<input type="text" id="cast_component" name="cast_component"><br>
+		  </div>
+		  <div  class="form-group">
+		  	<label for="crew_component" style="color: white">Regista:</label>
+			<input type="text" id="crew_component" name="crew_component"><br>
+		  </div>
+		  	<div style="padding-left: 12%">
+		  	<button type="submit" class="btn btn-primary" onclick="VerificaCampiVuoti()">Search!</button>
+		  </div>
+		</form>
+	</div>
+	
+	<script>
+	function VerificaCampiVuoti(){
+		var title = document.field_search.title.value;
+		var genre = document.field_search.genres.value;
+		var actor = document.field_search.cast_component.value;
+		var director = document.field_search.crew_component.value;
+		
+		if(title=="" && genre=="" && actor=="" && director==""){
+			alert("Inserire almeno un valore nel campo di ricerca");
+			document.field_search.title.focus();
+			document.field_search.genres.focus();
+			document.field_search.cast_component.focus();
+			document.field_search.crew_component.focus();
+			document.field_search.action="#";
+		}else{
+			document.field_search.action="/film/search";
+		}
+	}
+	</script>
 </body>
 </html>
