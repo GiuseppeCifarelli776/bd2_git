@@ -22,4 +22,10 @@ public class HomeController {
 		return page;
 	}
 	
+	@RequestMapping(value = "/prova", method = RequestMethod.GET)
+	public ModelAndView prova(Model model) {
+		ModelAndView page = new ModelAndView("prova.html");
+		
+		return page;
+	}
 }

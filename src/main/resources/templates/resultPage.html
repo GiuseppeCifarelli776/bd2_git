@@ -3,36 +3,30 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<title>FilmDB</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="home.css">
 	
-	<style>
-		table, td, th {
-		border: 1px solid black;
-		}
-		
-		table {
-		    border-collapse: collapse;
-		    width: 100%;
-		}
-		
-		td {
-		    height: 50px;
-		    vertical-align: bottom;
-		}
-	</style>
-	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<table id='mytable'>
+	<div style="padding-top: 2%; padding-left: 2%">
+		<form action="/">
+    		<button type="submit" class="btn btn-primary" >Home</button>
+    	</form>
+    </div>
+	<table id='mytable' class="table table-hover">
+	<thead>
 	<tr>
-		<th>Title</th> 
-		<th>Genres</th> 
-		<th>Production Companies</th>
-		<th>Production Countries</th>
-		<th>Release Date</th>
-		<th>Overview</th>
-		<th>Votes_Avg</th>
+		<th scope="col">Title</th> 
+		<th scope="col">Genres</th> 
+		<th scope="col">Production Companies</th>
+		<th scope="col">Production Countries</th>
+		<th scope="col">Release Date</th>
+		<th scope="col">Overview</th>
+		<th scope="col">Votes_Avg</th>
 	</tr>
+	</thead>
 	<div>
 	</div>
 	
@@ -79,6 +73,7 @@
 		var elenco_genres = [];
 		var elenco_comp = [];
 		var elenco_count = [];
+		$("#mytable").append("<tbody>");
 		$.getJSON(request_string,
 				function(data) {
 					var iterator = data;
@@ -113,7 +108,7 @@
 					}
 					for(var i=0;i<elenco.length;i++)
 				    {
-				        var tr  ="<tr>"+
+				         var tr  ="<tr>"+
 				                "<td>"+elenco[i]["Title"]+"</td>"+
 				                "<td>"+elenco[i]["Genres"]+"</td>"+
 				                "<td>"+elenco[i]["Companyies"]+"</td>"+
@@ -123,7 +118,9 @@
 				                "<td>"+elenco[i]["Votes_Avg"]+"</td></tr>";
 				       $("#mytable").append(tr);
 				    }
+				    
 			});
+		$("#mytable").append("</tbody>");
 		
 		
 	</script>
