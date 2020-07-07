@@ -10,6 +10,10 @@ public class Production_companies {
 		this.name = name;
 	}
 	
+	public Production_companies() {
+		
+	}
+	
 	public Integer getId() {
 		return this.id;
 	}

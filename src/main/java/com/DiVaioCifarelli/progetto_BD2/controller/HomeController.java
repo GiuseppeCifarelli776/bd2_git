@@ -16,5 +16,10 @@ public class HomeController {
 		return page;
 	}
 	
+	@RequestMapping(value="/film/search")
+	public ModelAndView userByNome(Model model) {
+		ModelAndView page = new ModelAndView("resultPage.html");
+		return page;
+	}
 	
 }

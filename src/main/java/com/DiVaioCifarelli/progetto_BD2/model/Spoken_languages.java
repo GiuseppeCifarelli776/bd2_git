@@ -10,6 +10,10 @@ public class Spoken_languages {
 		this.name = name;
 	}
 	
+	public Spoken_languages() {
+		
+	}
+	
 	public String getIso_639_1() {
 		return this.iso_639_1;
 	}

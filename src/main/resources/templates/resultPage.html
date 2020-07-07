@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<title>FilmDB</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
+	<style>
+		table, td, th {
+		border: 1px solid black;
+		}
+		
+		table {
+		    border-collapse: collapse;
+		    width: 100%;
+		}
+		
+		td {
+		    height: 50px;
+		    vertical-align: bottom;
+		}
+	</style>
+	
+</head>
+<body>
+	<table id='mytable'>
+	<tr>
+		<th>Title</th> 
+		<th>Genres</th> 
+		<th>Production Companies</th>
+		<th>Production Countries</th>
+		<th>Release Date</th>
+		<th>Overview</th>
+		<th>Votes_Avg</th>
+	</tr>
+	<div>
+	</div>
+	
+	<script>
+
+		let params = (new URL(document.location)).searchParams;
+		var title = params.get('title'); 
+		var genres = params.get('genres');
+		var cast = params.get('cast_component');
+		var crew = params.get('crew_component');
+
+		var request_string = "http://localhost:8080/api/listFilm?";
+		var c = 0
+		
+		if(title!=""){
+			request_string = request_string + "title="+title;
+			c = c + 1;
+		}
+		if(genres!=""){
+			if(c>0){
+				request_string = request_string + "&genres="+genres;	
+			}else{
+				c = c + 1;
+				request_string = request_string + "genres="+genres;	
+			}
+		}
+		if(cast!=""){
+			if(c>0){
+				request_string = request_string + "&cast_component="+cast;	
+			}else{
+				c = c + 1;
+				request_string = request_string + "cast_component="+cast;	
+			}
+		}
+		if(crew!=""){
+			if(c>0){
+				request_string = request_string + "&crew_component="+crew;	
+			}else{
+				c = c + 1;
+				request_string = request_string + "crew_component="+crew;	
+			}
+		}
+		var elenco = [];
+		var elenco_genres = [];
+		var elenco_comp = [];
+		var elenco_count = [];
+		$.getJSON(request_string,
+				function(data) {
+					var iterator = data;
+					for(var e in data){
+						item={};
+						item["Title"] = data[e].title;
+						var obj = JSON.parse(data[e].genres);
+						for(var o in obj){
+							elenco_genres.push(obj[o].name);
+						}
+						
+						var obj_comp = JSON.parse(data[e].production_companies);
+						for(var o in obj_comp){
+							elenco_comp.push(obj_comp[o].name);
+						}
+						
+						var obj_count = JSON.parse(data[e].production_countries);
+						for(var o in obj_count){
+							elenco_count.push(obj_count[o].name);
+						}
+						
+						item["Genres"] = elenco_genres;
+						item["Votes_Avg"] = data[e].vote_average;
+						item["Release_Date"] = data[e].release_date;
+						item["Overview"] = data[e].overview;
+						item["Companyies"] = elenco_comp;
+						item["Countries"] = elenco_count;
+						elenco_genres = [];
+						elenco_comp = [];
+						elenco_count = [];
+						elenco.push(item);					
+					}
+					for(var i=0;i<elenco.length;i++)
+				    {
+				        var tr  ="<tr>"+
+				                "<td>"+elenco[i]["Title"]+"</td>"+
+				                "<td>"+elenco[i]["Genres"]+"</td>"+
+				                "<td>"+elenco[i]["Companyies"]+"</td>"+
+				                "<td>"+elenco[i]["Countries"]+"</td>"+
+				                "<td>"+elenco[i]["Release_Date"]+"</td>"+
+				                "<td>"+elenco[i]["Overview"]+"</td>"+
+				                "<td>"+elenco[i]["Votes_Avg"]+"</td></tr>";
+				       $("#mytable").append(tr);
+				    }
+			});
+		
+		
+	</script>
+
+</table>
+</body>
+</html>

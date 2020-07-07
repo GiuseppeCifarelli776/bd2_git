@@ -10,6 +10,10 @@ public class Production_countries {
 		this.name = name;
 	}
 	
+	public Production_countries() {
+		
+	}
+	
 	public String getIso_3166_1() {
 		return this.iso_3166_1;
 	}

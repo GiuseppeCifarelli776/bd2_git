@@ -1,5 +1,6 @@
 package com.DiVaioCifarelli.progetto_BD2.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -14,7 +15,7 @@ public class Film {
 	private String _id;
 	
 	private String budget;
-	private List<Genere> genres;
+	private List<Genres> genres;
 	private String homepage;
 	private String id;
 	private List<Keyword> keywords;
@@ -34,7 +35,7 @@ public class Film {
 	private String vote_average;
 	private String vote_count;
 	
-	public Film(String _id, String budget, List<Genere> genres, String homepage, String original_lang, String original_title, 
+	public Film(String _id, String budget, List<Genres> genres, String homepage, String original_lang, String original_title, 
 			String overview, String popularity, List<Production_companies> prod_companies, List<Production_countries> prod_countries,
 			String rel_date, String revenue, String runtime, List<Spoken_languages> spok_lang, String status, String tagline, String title, 
 			String vote_avg, String vote_cnt) {
@@ -61,6 +62,9 @@ public class Film {
 		
 	}
 	
+	public Film() {
+		
+	}
 	
 	public String getBudget() {
 		return budget;
@@ -68,10 +72,10 @@ public class Film {
 	public void setBudget(String budget) {
 		this.budget = budget;
 	}
-	public List<Genere> getGenres() {
+	public List<Genres> getGenres() {
 		return genres;
 	}
-	public void setGenres(List<Genere> genres) {
+	public void setGenres(List<Genres> genres) {
 		this.genres = genres;
 	}
 	public String getHomepage() {
@@ -182,4 +186,5 @@ public class Film {
 	public void setVote_count(String vote_count) {
 		this.vote_count = vote_count;
 	}
+	
 }

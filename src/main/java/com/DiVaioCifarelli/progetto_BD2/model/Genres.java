@@ -1,16 +1,16 @@
 package com.DiVaioCifarelli.progetto_BD2.model;
 
-public class Keyword {
-	
+public class Genres {
 	private Integer id;
 	private String name;
 	
-	public Keyword(Integer id, String name) {
-		this.id = id;
+	public Genres(Integer id, String name) {
+		//this.id = id;
 		this.name = name;
 	}
 	
-	public Keyword() {
+	
+	public Genres() {
 		
 	}
 	

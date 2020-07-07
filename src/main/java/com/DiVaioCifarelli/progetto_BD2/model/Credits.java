@@ -18,12 +18,18 @@ public class Credits {
 	private List<Cast> cast;
 	private List<Crew> crew;
 	
+	
+	
 	public Credits(String _id, String m_id, String title, List<Cast> c, List<Crew> cr) {
 		this._id = _id;
 		this.setMovie_id(m_id);
 		this.setTitle(title);
 		this.setCast(c);
 		this.setCrew(cr);
+	}
+	
+	public Credits() {
+		
 	}
 
 	public String getMovie_id() {

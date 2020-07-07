@@ -18,6 +18,11 @@ public class Crew {
 		this.setName(name);
 	}
 
+	
+	public Crew() {
+		
+	}
+	
 	public String getCredit_id() {
 		return credit_id;
 	}

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.DiVaioCifarelli.progetto_BD2.model.Credits;
 import com.DiVaioCifarelli.progetto_BD2.model.Film;
+import com.DiVaioCifarelli.progetto_BD2.model.ResultTable;
 import com.DiVaioCifarelli.progetto_BD2.repository.CreditsRepository;
 import com.DiVaioCifarelli.progetto_BD2.repository.FilmRepository;
+
 
 
 
@@ -28,6 +30,22 @@ public class FilmController {
 	@Autowired
 	CreditsRepository creditsRepository;
 	
+	@GetMapping("/prova")
+	public ResponseEntity<List<Film>> getByTitle(@RequestParam(required = true) String title){
+		try {
+		    List<Film> elenco = new ArrayList<Film>();
+	    	elenco = filmRepository.findByTitle(title);
+		    if (elenco.isEmpty()) {
+		    	System.out.println("is empty");
+		      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		    }
+		    System.out.println(elenco.size());
+		    return new ResponseEntity<>(elenco, HttpStatus.OK);
+		  } catch (Exception e) {
+		    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		  }
+	}
+	
 	@GetMapping("/listFilm")
 	public ResponseEntity<List<Film>> getByCognome(
 			@RequestParam(required = false) String title,
@@ -39,48 +57,44 @@ public class FilmController {
 			
 			List<Film> title_genres = new ArrayList<Film>();
 			List<Credits> crew_cast = new ArrayList<Credits>();
+//			System.out.println(title);
+//			System.out.println(genres);
+//			System.out.println(cast_component);
+//			System.out.println(crew_component);
 			
 			if(title != null && genres != null) {
-				System.out.println("1");
 				//query con title e genres
 				filmRepository.findByTitleAndGenres(title, genres).forEach(title_genres::add);
 			}else {
 				if(title == null) {
 					//query con genres
-					System.out.println("2");
 					if(genres != null)filmRepository.findByGenres(genres).forEach(title_genres::add);
 				}else {
 					if(genres == null) {
 						//query con title
-						System.out.println("3");
 						filmRepository.findByTitle(title).forEach(title_genres::add);
-						System.out.println("uscito");
 					}
 				}
 			}
 			
 			if(cast_component != null && crew_component != null) {
 				//query con crew e cast
-				System.out.println("4");
 				creditsRepository.findByCastAndCrew(cast_component, crew_component).forEach(crew_cast::add);
 			}else {
 				if(cast_component == null) {
-					System.out.println("5");
 					if(crew_component!=null) creditsRepository.findByCrew(crew_component).forEach(crew_cast::add);;
 					}else {
 						if(crew_component == null) {
-							System.out.println("6");
 							//query con cast_component
 							creditsRepository.findByCast(cast_component).forEach(crew_cast::add);
 						}
 					}
 				}
 			
+			
 			if(!(title_genres.isEmpty()) && !(crew_cast.isEmpty())) {
-				System.out.println("7");
 				//join
 				for(Film f : title_genres) {
-					System.out.println("8");
 					if(Intersect(f, crew_cast)) films.add(f);
 				}
 			}else {
@@ -88,20 +102,11 @@ public class FilmController {
 				else films = title_genres;
 			}
 			
-			
-			
-			for(Film f:films) {
-				System.out.println(f.getTitle());
-			}
-			System.out.println(films.size());
-			
-			
-			
 		    if (films.isEmpty()) {
 		    	System.out.println("is empty");
 		      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		    }
-		    System.out.println("ok");
+		    
 		    return new ResponseEntity<>(films, HttpStatus.OK);
 		  } catch (Exception e) {
 		    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -111,8 +116,10 @@ public class FilmController {
 	
 	public List<Film> getFilms(List<Credits> cred){
 		List<Film> lista = new ArrayList<Film>();
+		Film f;
 		for(Credits c : cred) {
-			lista = filmRepository.findByTitle(c.getTitle());
+			f = (filmRepository.findByTitle(c.getTitle())).get(0);
+			lista.add(f);
 		}
 		return lista;
 	}
