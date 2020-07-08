@@ -3,7 +3,6 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<title>FilmDB</title>
-	<link rel="stylesheet" type="text/css" href="home.css">
 	
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -19,7 +18,7 @@
 	<thead>
 	<tr>
 		<th scope="col">Title</th> 
-		<th scope="col">Overview</th>
+		<th scope="col" style = "width: 300px">Overview</th>
 		<th scope="col">Genres</th> 
 		<th scope="col">Production Companies</th>
 		<th scope="col">Production Countries</th>
@@ -110,7 +109,7 @@
 				    {
 				         var tr  ="<tr>"+
 				                "<td>"+elenco[i]["Title"]+"</td>"+
-				                "<td>"+elenco[i]["Overview"]+"</td>"+
+				                "<td style = 'width: 300px'>"+elenco[i]["Overview"]+"</td>"+
 				                "<td>"+elenco[i]["Genres"]+"</td>"+
 				                "<td>"+elenco[i]["Companyies"]+"</td>"+
 				                "<td>"+elenco[i]["Countries"]+"</td>"+
