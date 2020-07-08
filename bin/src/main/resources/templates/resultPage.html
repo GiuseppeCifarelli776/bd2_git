@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<title>FilmDB</title>
+	<link rel="stylesheet" type="text/css" href="home.css">
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div style="padding-top: 2%; padding-left: 2%">
+		<form action="/">
+    		<button type="submit" class="btn btn-primary" >Home</button>
+    	</form>
+    </div>
+	<table id='mytable' class="table table-hover">
+	<thead>
+	<tr>
+		<th scope="col">Title</th> 
+		<th scope="col">Overview</th>
+		<th scope="col">Genres</th> 
+		<th scope="col">Production Companies</th>
+		<th scope="col">Production Countries</th>
+		<th scope="col">Release Date</th>
+		<th scope="col">Votes_Avg</th>
+	</tr>
+	</thead>
+	<div>
+	</div>
+	
+	<script>
+
+		let params = (new URL(document.location)).searchParams;
+		var title = params.get('title'); 
+		var genres = params.get('genres');
+		var cast = params.get('cast_component');
+		var crew = params.get('crew_component');
+
+		var request_string = "http://localhost:8080/api/listFilm?";
+		var c = 0
+		
+		if(title!=""){
+			request_string = request_string + "title="+title;
+			c = c + 1;
+		}
+		if(genres!=""){
+			if(c>0){
+				request_string = request_string + "&genres="+genres;	
+			}else{
+				c = c + 1;
+				request_string = request_string + "genres="+genres;	
+			}
+		}
+		if(cast!=""){
+			if(c>0){
+				request_string = request_string + "&cast_component="+cast;	
+			}else{
+				c = c + 1;
+				request_string = request_string + "cast_component="+cast;	
+			}
+		}
+		if(crew!=""){
+			if(c>0){
+				request_string = request_string + "&crew_component="+crew;	
+			}else{
+				c = c + 1;
+				request_string = request_string + "crew_component="+crew;	
+			}
+		}
+		var elenco = [];
+		var elenco_genres = [];
+		var elenco_comp = [];
+		var elenco_count = [];
+		$("#mytable").append("<tbody>");
+		$.getJSON(request_string,
+				function(data) {
+					var iterator = data;
+					for(var e in data){
+						item={};
+						item["Title"] = data[e].title;
+						var obj = JSON.parse(data[e].genres);
+						for(var o in obj){
+							elenco_genres.push(obj[o].name);
+						}
+						
+						var obj_comp = JSON.parse(data[e].production_companies);
+						for(var o in obj_comp){
+							elenco_comp.push(obj_comp[o].name);
+						}
+						
+						var obj_count = JSON.parse(data[e].production_countries);
+						for(var o in obj_count){
+							elenco_count.push(obj_count[o].name);
+						}
+						
+						item["Genres"] = elenco_genres;
+						item["Votes_Avg"] = data[e].vote_average;
+						item["Release_Date"] = data[e].release_date;
+						item["Overview"] = data[e].overview;
+						item["Companyies"] = elenco_comp;
+						item["Countries"] = elenco_count;
+						elenco_genres = [];
+						elenco_comp = [];
+						elenco_count = [];
+						elenco.push(item);					
+					}
+					for(var i=0;i<elenco.length;i++)
+				    {
+				         var tr  ="<tr>"+
+				                "<td>"+elenco[i]["Title"]+"</td>"+
+				                "<td>"+elenco[i]["Overview"]+"</td>"+
+				                "<td>"+elenco[i]["Genres"]+"</td>"+
+				                "<td>"+elenco[i]["Companyies"]+"</td>"+
+				                "<td>"+elenco[i]["Countries"]+"</td>"+
+				                "<td>"+elenco[i]["Release_Date"]+"</td>"+
+				                "<td>"+elenco[i]["Votes_Avg"]+"</td></tr>";
+				       $("#mytable").append(tr);
+				    }
+				    
+			});
+		$("#mytable").append("</tbody>");
+		
+		
+	</script>
+
+</table>
+</body>
+</html>

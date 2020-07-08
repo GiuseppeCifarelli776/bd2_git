@@ -17,12 +17,12 @@
 </style>
 </head>
 <body>
-	<div class="text-center">
+	<div class="text-center" style="padding-top: 2%">
 	  <img src="logo.png" class="rounded" alt="logo_unisa" style="height: 200px; width: 200px;">
 	</div>
-<div class="container" style="width:100%;height:auto;display:flex;">
- <div style=" width:50%;height:100px;padding-left:14%">
-		<label for="desc" style="padding-left: 14%; font-size: 20px; color: white">Ricerca Film</label>
+	 
+	<div style="padding-left: 40%;padding-top: 2%;">
+		<label for="desc" style="padding-left: 8%; font-size: 20px; color: white">Ricerca Film</label>
 		<form action="/film/search" method="GET" name="field_search">
 		  <div class="form-group">
 		    <label for="title" style="color: white">Titolo:</label>
@@ -40,47 +40,13 @@
 		  	<label for="crew_component" style="color: white">Regista:</label>
 			<input type="text" id="crew_component" name="crew_component"><br>
 		  </div>
-		  	<div style="padding-left: 20%">
+		  	<div style="padding-left: 12%">
 		  	<button type="submit" class="btn btn-primary" onclick="VerificaCampiVuoti()">Search!</button>
 		  </div>
 		</form>
 	</div>
 	
-<div style="width:50%;height:100px;padding-left:18%">
-<label for="desc" style="font-size: 20px; color: white;">Statistiche Film</label>
-
-<div class="form-check">
-    <input id="checkbox1" type="checkbox">
-    <label for="checkbox1" style="color:white;font-size:16px">Action</label>
-  </div>
-  <div class="form-check">
-    <input id="checkbox1" type="checkbox">
-    <label for="checkbox1" style="color:white;font-size:16px">Adventure</label>
-  </div>
-  <div class="form-check">
-    <input id="checkbox1" type="checkbox">
-    <label for="checkbox1"style="color:white; font-size:16px">Comedy</label>
-  </div>
-  <div class="form-check">
-    <input id="checkbox1" type="checkbox">
-    <label for="checkbox1" style="color:white;font-size:16px">Drama</label>
-  </div>
-  <div class="form-check">
-    <input id="checkbox1" type="checkbox">
-    <label for="checkbox1" style="color:white;font-size:16px">Horror</label>
-  </div>
-  <div class="custom-select" style="width:200px;">
-  <select>
-    <option value="0">Seleziona:</option>
-    <option value="1">Media Voto</option>
-    <option value="2">Media Incasso</option>
-  </select>
-  <div style="padding-left: 20%; padding-top:2%">
-  	<button type="submit" class="btn btn-primary" onclick=#>Search!</button>
-  </div>
-</div>
-
-<script>
+	<script>
 	function VerificaCampiVuoti(){
 		var title = document.field_search.title.value;
 		var genre = document.field_search.genres.value;
