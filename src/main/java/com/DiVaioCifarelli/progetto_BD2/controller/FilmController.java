@@ -1,7 +1,12 @@
 package com.DiVaioCifarelli.progetto_BD2.controller;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +20,7 @@ import com.DiVaioCifarelli.progetto_BD2.model.Credits;
 import com.DiVaioCifarelli.progetto_BD2.model.Film;
 import com.DiVaioCifarelli.progetto_BD2.model.Genres;
 import com.DiVaioCifarelli.progetto_BD2.model.Production_countries;
+import com.DiVaioCifarelli.progetto_BD2.model.ResultStatics;
 import com.DiVaioCifarelli.progetto_BD2.repository.CreditsRepository;
 import com.DiVaioCifarelli.progetto_BD2.repository.FilmRepository;
 
@@ -25,6 +31,8 @@ import com.DiVaioCifarelli.progetto_BD2.repository.FilmRepository;
 @RestController
 @RequestMapping("/api")
 public class FilmController {
+	
+	private static DecimalFormat df = new DecimalFormat("0.00");
 	
 	@Autowired
 	FilmRepository filmRepository;
@@ -45,6 +53,94 @@ public class FilmController {
 		  } catch (Exception e) {
 		    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		  }
+	}
+	
+	@GetMapping("/statics")
+	public ResponseEntity<List<ResultStatics>> produceStatics(@RequestParam(required = true) String axis, 
+			@RequestParam(required = false) String genere_1, @RequestParam(required = false) String genere_2,
+			@RequestParam(required = false) String genere_3, @RequestParam(required = false) String genere_4){
+		List<ResultStatics> value_return = new ArrayList<>();
+		try {
+		    
+		    if(axis.equals("vote_avg")) {
+		    	//calcolo voto medio per tutti i generi
+		    	if(genere_1 != null) 
+		    		value_return.add(calcStatsRateAvg(genere_1));
+		    	
+		    	if(genere_2 != null) 
+		    		value_return.add(calcStatsRateAvg(genere_2));
+		    	
+		    	if(genere_3 != null) 
+		    		value_return.add(calcStatsRateAvg(genere_3));
+		    	
+		    	if(genere_4 != null) 
+		    		value_return.add(calcStatsRateAvg(genere_4));
+		    }else {
+		    	//calcolo incasso medio per tutti i generi
+		    	if(genere_1 != null) 
+		    		value_return.add(calcStatsRevAvg(genere_1));
+		    	
+		    	if(genere_2 != null) 
+		    		value_return.add(calcStatsRevAvg(genere_2));
+		    	
+		    	if(genere_3 != null) 
+		    		value_return.add(calcStatsRevAvg(genere_3));
+		    	
+		    	if(genere_4 != null) 
+		    		value_return.add(calcStatsRevAvg(genere_4));
+		    	
+		    }
+		    if (value_return.isEmpty()) {
+		    	System.out.println("is empty");
+		      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		    }else {
+		    	System.out.println("ok");
+		    	for(ResultStatics r : value_return) System.out.println("Genere - " + r.getGenre() + " Voto Medio - " + r.getAxis());
+			    return new ResponseEntity<>(value_return, HttpStatus.OK);
+		    }
+		  } catch (Exception e) {
+		    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		  }
+	}
+	
+	public ResultStatics calcStatsRateAvg(String genere) {
+		ResultStatics object_return;
+		
+		//chiamare il finder per tutti i generi effettuando i controlli
+    	List<Film> films = filmRepository.findByGenres(genere);
+    	List<Float> temp = new ArrayList<Float>();
+    	Float sum = new Float(0);
+    	for(Film f : films) {
+    		temp.add(Float.valueOf(f.getVote_average()));
+    	}
+    	for(Float d : temp) sum += d;
+    	
+    	String result = df.format((sum/temp.size()));
+    	//System.out.println("Media : " + result);
+    	
+    	object_return = new ResultStatics(genere, result);
+    	System.out.println(object_return.getGenre() + " - " + object_return.getAxis());
+		return object_return;
+	}
+	
+	public ResultStatics calcStatsRevAvg(String genere) {
+		ResultStatics object_return;
+		
+		//chiamare il finder per tutti i generi effettuando i controlli
+    	List<Film> films = filmRepository.findByGenres(genere);
+    	List<Float> temp = new ArrayList<Float>();
+    	Float sum = new Float(0);
+    	for(Film f : films) {
+    		temp.add(Float.valueOf(f.getRevenue()));
+    	}
+    	for(Float d : temp) sum += d;
+    	
+    	String result = df.format((sum/temp.size()));
+    	//System.out.println("Media : " + result);
+    	
+    	object_return = new ResultStatics(genere, result);
+    	System.out.println(object_return.getGenre() + " - " + object_return.getAxis());
+		return object_return;
 	}
 	
 	@GetMapping("/listFilm")
@@ -107,6 +203,13 @@ public class FilmController {
 		    	System.out.println("is empty");
 		      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		    }
+		    
+		    String temp = films.get(0).release_date;
+		    String year = new String();
+		    for(int i = 0; i<4; i++) {
+		    	year += temp.charAt(i);
+		    }
+		    
 		    
 		    return new ResponseEntity<>(films, HttpStatus.OK);
 		  } catch (Exception e) {

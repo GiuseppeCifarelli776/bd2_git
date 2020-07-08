@@ -24,7 +24,7 @@ public class Film {
 	private String popularity;
 	private List<Production_companies> production_companies;
 	private List<Production_countries> production_countries;
-	private String release_date;
+	public String release_date;
 	private String revenue;
 	private String runtime;
 	private List<Spoken_languages> spoken_languages;
