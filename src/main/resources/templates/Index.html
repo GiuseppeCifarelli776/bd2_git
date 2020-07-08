@@ -48,36 +48,40 @@
 	
 <div style="width:50%;height:100px;padding-left:18%">
 <label for="desc" style="font-size: 20px; color: white;">Statistiche Film</label>
-
-<div class="form-check">
-    <input id="checkbox1" type="checkbox">
-    <label for="checkbox1" style="color:white;font-size:16px">Action</label>
-  </div>
-  <div class="form-check">
-    <input id="checkbox1" type="checkbox">
-    <label for="checkbox1" style="color:white;font-size:16px">Adventure</label>
-  </div>
-  <div class="form-check">
-    <input id="checkbox1" type="checkbox">
-    <label for="checkbox1"style="color:white; font-size:16px">Comedy</label>
-  </div>
-  <div class="form-check">
-    <input id="checkbox1" type="checkbox">
-    <label for="checkbox1" style="color:white;font-size:16px">Drama</label>
-  </div>
-  <div class="form-check">
-    <input id="checkbox1" type="checkbox">
-    <label for="checkbox1" style="color:white;font-size:16px">Horror</label>
-  </div>
-  <div class="custom-select" style="width:200px;">
-  <select>
-    <option value="0">Seleziona:</option>
-    <option value="1">Media Voto</option>
-    <option value="2">Media Incasso</option>
-  </select>
-  <div style="padding-left: 20%; padding-top:2%">
-  	<button type="submit" class="btn btn-primary" onclick=#>Search!</button>
-  </div>
+	
+	<form action="/film/stats" method="GET" name="statistiche_films">
+		<div class="form-check">
+		    <input id="genere_1" type="checkbox" name="genere_1" value = "Action">
+		    <label for="genere_1" style="color:white;font-size:16px">Action</label>
+		  </div>
+		  <div class="form-check">
+		    <input id="genere_2" type="checkbox" value="Adventure" name="genere_2" >
+		    <label for="genere_2" style="color:white;font-size:16px">Adventure</label>
+		  </div>
+		  <div class="form-check">
+		    <input id="genere_3" type="checkbox" value="Comedy" name="genere_3">
+		    <label for="genere_3"style="color:white; font-size:16px">Comedy</label>
+		  </div>
+		  <div class="form-check">
+		    <input id="genere_4" type="checkbox" value="Drama" name="genere_4" >
+		    <label for="genere_4" style="color:white;font-size:16px">Drama</label>
+		  </div>
+		  <div class="form-check">
+		    <input id="genere_5" type="checkbox" value="Horror" name="genere_5" >
+		    <label for="genere_5" style="color:white;font-size:16px">Horror</label>
+		  </div>
+		  <div class="custom-select" style="width:200px;">
+		  <select id="axis" name="axis">
+		    <option value="0">Seleziona:</option>
+		    <option value="vote_avg">Media Voto</option>
+		    <option value="rev_avg">Media Incasso</option>
+		  </select>
+		  <div style="padding-left: 20%; padding-top:2%">
+		  	<button type="submit" class="btn btn-primary" onclick="verify()">Search!</button>
+		  </div>
+		</div>
+	</form>
+</div>
 </div>
 
 <script>
@@ -99,5 +103,6 @@
 		}
 	}
 	</script>
+	
 </body>
 </html>

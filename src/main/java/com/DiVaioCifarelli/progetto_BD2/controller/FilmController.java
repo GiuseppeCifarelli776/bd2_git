@@ -58,54 +58,80 @@ public class FilmController {
 	@GetMapping("/statics")
 	public ResponseEntity<List<ResultStatics>> produceStatics(@RequestParam(required = true) String axis, 
 			@RequestParam(required = false) String genere_1, @RequestParam(required = false) String genere_2,
-			@RequestParam(required = false) String genere_3, @RequestParam(required = false) String genere_4){
+			@RequestParam(required = false) String genere_3, @RequestParam(required = false) String genere_4,
+			@RequestParam(required = false) String genere_5){
 		List<ResultStatics> value_return = new ArrayList<>();
+		System.out.println("statistiche");
 		try {
-		    
+//		    
+			System.out.println(axis);
+			System.out.println(genere_1);
+			System.out.println(genere_2);
+			System.out.println(genere_3);
+			System.out.println(genere_4);
+			System.out.println(genere_5);
+//			
 		    if(axis.equals("vote_avg")) {
 		    	//calcolo voto medio per tutti i generi
-		    	if(genere_1 != null) 
+		    	if(genere_1 != null && !(genere_1.equals("null"))) {
 		    		value_return.add(calcStatsRateAvg(genere_1));
+		    	}
 		    	
-		    	if(genere_2 != null) 
+		    	if(genere_2 != null && !(genere_2.equals("null"))) { 
 		    		value_return.add(calcStatsRateAvg(genere_2));
+		    	}
 		    	
-		    	if(genere_3 != null) 
+		    	if(genere_3 != null && !(genere_3.equals("null"))) { 
 		    		value_return.add(calcStatsRateAvg(genere_3));
+		    	}
 		    	
-		    	if(genere_4 != null) 
+		    	if(genere_4 != null && !(genere_4.equals("null"))) { 
 		    		value_return.add(calcStatsRateAvg(genere_4));
+		    	}
+		    	
+		    	if(genere_5 != null && !(genere_5.equals("null"))) { 
+		    		value_return.add(calcStatsRateAvg(genere_5));
+		    	}
+		    	
 		    }else {
 		    	//calcolo incasso medio per tutti i generi
-		    	if(genere_1 != null) 
+		    	if(genere_1 != null && !(genere_1.equals("null"))) {
 		    		value_return.add(calcStatsRevAvg(genere_1));
+		    	}
 		    	
-		    	if(genere_2 != null) 
+		    	if(genere_2 != null && !(genere_2.equals("null"))) {
 		    		value_return.add(calcStatsRevAvg(genere_2));
+		    	}
 		    	
-		    	if(genere_3 != null) 
+		    	if(genere_3 != null && !(genere_3.equals("null"))) {
 		    		value_return.add(calcStatsRevAvg(genere_3));
+		    	}
 		    	
-		    	if(genere_4 != null) 
+		    	if(genere_4 != null && !(genere_4.equals("null"))) {
 		    		value_return.add(calcStatsRevAvg(genere_4));
+		    	}
+		    	
+		    	if(genere_5 != null && !(genere_5.equals("null"))) {
+		    		value_return.add(calcStatsRevAvg(genere_5));
+		    	}
 		    	
 		    }
 		    if (value_return.isEmpty()) {
 		    	System.out.println("is empty");
 		      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		    }else {
-		    	System.out.println("ok");
-		    	for(ResultStatics r : value_return) System.out.println("Genere - " + r.getGenre() + " Voto Medio - " + r.getAxis());
+		    	for(ResultStatics r : value_return) System.out.println(r.getGenre() + " - " + r.getAxis());
 			    return new ResponseEntity<>(value_return, HttpStatus.OK);
 		    }
 		  } catch (Exception e) {
+			  System.out.println("exception");
 		    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		  }
 	}
 	
 	public ResultStatics calcStatsRateAvg(String genere) {
 		ResultStatics object_return;
-		
+//		System.out.println("genere in funzione - " + genere);
 		//chiamare il finder per tutti i generi effettuando i controlli
     	List<Film> films = filmRepository.findByGenres(genere);
     	List<Float> temp = new ArrayList<Float>();
@@ -124,6 +150,7 @@ public class FilmController {
 	}
 	
 	public ResultStatics calcStatsRevAvg(String genere) {
+		System.out.println("genere in funzione : " + genere );
 		ResultStatics object_return;
 		
 		//chiamare il finder per tutti i generi effettuando i controlli
@@ -139,7 +166,7 @@ public class FilmController {
     	//System.out.println("Media : " + result);
     	
     	object_return = new ResultStatics(genere, result);
-    	System.out.println(object_return.getGenre() + " - " + object_return.getAxis());
+//    	System.out.println(object_return.getGenre() + " - " + object_return.getAxis());
 		return object_return;
 	}
 	

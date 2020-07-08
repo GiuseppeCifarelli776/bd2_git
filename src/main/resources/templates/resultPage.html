@@ -17,13 +17,13 @@
 	<table id='mytable' class="table table-hover">
 	<thead>
 	<tr>
-		<th scope="col">Title</th> 
+		<th scope="col" style = "width: 100px">Title</th> 
 		<th scope="col" style = "width: 300px">Overview</th>
-		<th scope="col">Genres</th> 
-		<th scope="col">Production Companies</th>
-		<th scope="col">Production Countries</th>
-		<th scope="col">Release Date</th>
-		<th scope="col">Votes_Avg</th>
+		<th scope="col" style = "width: 100px">Genres</th> 
+		<th scope="col" style = "width: 100px">Production Companies</th>
+		<th scope="col" style = "width: 100px">Production Countries</th>
+		<th scope="col" style = "width: 100px">Release Date</th>
+		<th scope="col" style = "width: 100px">Votes_Avg</th>
 	</tr>
 	</thead>
 	<div>
@@ -108,13 +108,13 @@
 					for(var i=0;i<elenco.length;i++)
 				    {
 				         var tr  ="<tr>"+
-				                "<td>"+elenco[i]["Title"]+"</td>"+
+				                "<td style = 'width: 100px'>"+elenco[i]["Title"]+"</td>"+
 				                "<td style = 'width: 300px'>"+elenco[i]["Overview"]+"</td>"+
-				                "<td>"+elenco[i]["Genres"]+"</td>"+
-				                "<td>"+elenco[i]["Companyies"]+"</td>"+
-				                "<td>"+elenco[i]["Countries"]+"</td>"+
-				                "<td>"+elenco[i]["Release_Date"]+"</td>"+
-				                "<td>"+elenco[i]["Votes_Avg"]+"</td></tr>";
+				                "<td style = 'width: 100px'>"+elenco[i]["Genres"]+"</td>"+
+				                "<td style = 'width: 100px'>"+elenco[i]["Companyies"]+"</td>"+
+				                "<td style = 'width: 100px'>"+elenco[i]["Countries"]+"</td>"+
+				                "<td style = 'width: 100px'>"+elenco[i]["Release_Date"]+"</td>"+
+				                "<td style = 'width: 100px'>"+elenco[i]["Votes_Avg"]+"</td></tr>";
 				       $("#mytable").append(tr);
 				    }
 				    

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<title>FilmDB</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	
+ <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+  
+  
+</head>
+<body>
+<div style="padding-top: 2%; padding-left: 48%">
+		<form action="/">
+    		<button type="submit" class="btn btn-primary" >Home</button>
+    	</form>
+</div>
+<div id='myDiv'></div>
+
+
+
+	 <script>
+  	let params = (new URL(document.location)).searchParams;
+	var axis =  params.get('axis');
+	var genere_1 =  params.get('genere_1');
+	var genere_2 =  params.get('genere_2');
+	var genere_3 =  params.get('genere_3');
+	var genere_4 =  params.get('genere_4');
+	var genere_5 =  params.get('genere_5');
+	
+	var elenco_generi = [];
+	var request_string = "http://localhost:8080/api/statics?axis="+axis;
+	
+	if(genere_1!=""){
+		request_string = request_string + "&genere_1="+genere_1;
+		elenco_generi.push(genere_1)
+	}
+	if(genere_2!=""){
+		request_string = request_string + "&genere_2="+genere_2;
+		elenco_generi.push(genere_2)
+	}
+	if(genere_3!=""){
+		request_string = request_string + "&genere_3="+genere_3;
+		elenco_generi.push(genere_3)
+	}
+	if(genere_4!=""){
+		request_string = request_string + "&genere_4="+genere_4;
+		elenco_generi.push(genere_4)
+	}
+	if(genere_5!=""){
+		request_string = request_string + "&genere_5="+genere_5;
+		elenco_generi.push(genere_5)
+	}
+	
+	console.log(axis);
+	console.log(request_string);
+	
+	$.getJSON(request_string,
+			function(data) {
+				var x = [];
+				var y = [];
+				
+				var iterator = data;
+				for(var e in data){
+					var num = (data[e].axis).replace(',','.');
+					x.push(data[e].genre);
+					y.push(parseFloat(num));
+				}
+		
+				var data = [
+				  {
+				    histfunc: "count",
+				    y: y,
+				    x: x,
+				    type: "bar",
+				    name: "count",
+				    width: "0.2"
+				  }
+				]
+		
+				Plotly.newPlot('myDiv', data)
+		});
+	
+	
+
+	
+	</script>
+</body>
+</html>
