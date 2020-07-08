@@ -117,14 +117,12 @@
 			alert("Selezionare almeno un genere!");
 			document.statistiche_films.action="#";
 		}else{
-			document.statistiche_films.action="/film/stats";
-		}
-		
-		if(type == 0){
-			alert("Selezionare almeno una statistica!");
-			document.statistiche_films.action="#";
-		}else{
-			document.statistiche_films.action="/film/stats";
+			if(type == 0) {
+				alert("Selezionare almeno una statistica!");
+				document.statistiche_films.action="#";
+			}else{
+				document.statistiche_films.action="/film/stats";
+			}
 		}
 	}
 	</script>
