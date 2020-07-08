@@ -77,7 +77,7 @@
 		    <option value="rev_avg">Media Incasso</option>
 		  </select>
 		  <div style="padding-left: 20%; padding-top:2%">
-		  	<button type="submit" class="btn btn-primary" onclick="verify()">Search!</button>
+		  	<button type="submit" class="btn btn-primary" onclick="VerificaCheckBox()">Generate!</button>
 		  </div>
 		</div>
 	</form>
@@ -100,6 +100,31 @@
 			document.field_search.action="#";
 		}else{
 			document.field_search.action="/film/search";
+		}
+	}
+	
+	function VerificaCheckBox(){
+		var check_1 = document.statistiche_films.genere_1.checked;
+		var check_2 = document.statistiche_films.genere_2.checked;
+		var check_3 = document.statistiche_films.genere_3.checked;
+		var check_4 = document.statistiche_films.genere_4.checked;
+		var check_5 = document.statistiche_films.genere_5.checked;
+		
+		var type = document.statistiche_films.axis.value;
+		
+		
+		if(!check_1 && !check_2 && !check_3 && !check_4 && !check_5){
+			alert("Selezionare almeno un genere!");
+			document.statistiche_films.action="#";
+		}else{
+			document.statistiche_films.action="/film/stats";
+		}
+		
+		if(type == 0){
+			alert("Selezionare almeno una statistica!");
+			document.statistiche_films.action="#";
+		}else{
+			document.statistiche_films.action="/film/stats";
 		}
 	}
 	</script>

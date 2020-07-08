@@ -63,14 +63,14 @@ public class FilmController {
 		List<ResultStatics> value_return = new ArrayList<>();
 		System.out.println("statistiche");
 		try {
-//		    
-			System.out.println(axis);
-			System.out.println(genere_1);
-			System.out.println(genere_2);
-			System.out.println(genere_3);
-			System.out.println(genere_4);
-			System.out.println(genere_5);
-//			
+////		    
+//			System.out.println(axis);
+//			System.out.println(genere_1);
+//			System.out.println(genere_2);
+//			System.out.println(genere_3);
+//			System.out.println(genere_4);
+//			System.out.println(genere_5);
+////			
 		    if(axis.equals("vote_avg")) {
 		    	//calcolo voto medio per tutti i generi
 		    	if(genere_1 != null && !(genere_1.equals("null"))) {
@@ -120,7 +120,7 @@ public class FilmController {
 		    	System.out.println("is empty");
 		      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		    }else {
-		    	for(ResultStatics r : value_return) System.out.println(r.getGenre() + " - " + r.getAxis());
+//		    	for(ResultStatics r : value_return) System.out.println(r.getGenre() + " - " + r.getAxis());
 			    return new ResponseEntity<>(value_return, HttpStatus.OK);
 		    }
 		  } catch (Exception e) {
@@ -131,7 +131,6 @@ public class FilmController {
 	
 	public ResultStatics calcStatsRateAvg(String genere) {
 		ResultStatics object_return;
-//		System.out.println("genere in funzione - " + genere);
 		//chiamare il finder per tutti i generi effettuando i controlli
     	List<Film> films = filmRepository.findByGenres(genere);
     	List<Float> temp = new ArrayList<Float>();
@@ -152,7 +151,6 @@ public class FilmController {
 	public ResultStatics calcStatsRevAvg(String genere) {
 		System.out.println("genere in funzione : " + genere );
 		ResultStatics object_return;
-		
 		//chiamare il finder per tutti i generi effettuando i controlli
     	List<Film> films = filmRepository.findByGenres(genere);
     	List<Float> temp = new ArrayList<Float>();
@@ -163,10 +161,8 @@ public class FilmController {
     	for(Float d : temp) sum += d;
     	
     	String result = df.format((sum/temp.size()));
-    	//System.out.println("Media : " + result);
     	
     	object_return = new ResultStatics(genere, result);
-//    	System.out.println(object_return.getGenre() + " - " + object_return.getAxis());
 		return object_return;
 	}
 	
