@@ -26,8 +26,6 @@
 		<th scope="col" style = "width: 100px">Votes_Avg</th>
 	</tr>
 	</thead>
-	<div>
-	</div>
 	
 	<script>
 
@@ -117,6 +115,10 @@
 				                "<td style = 'width: 100px'>"+elenco[i]["Votes_Avg"]+"</td></tr>";
 				       $("#mytable").append(tr);
 				    }
+					if(data == undefined){
+						alert("La ricerca non ha prodotto risultati");
+						location.replace("http://localhost:8080/");
+					}
 				    
 			});
 		$("#mytable").append("</tbody>");
