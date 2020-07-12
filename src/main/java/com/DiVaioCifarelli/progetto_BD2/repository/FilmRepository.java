@@ -11,7 +11,7 @@ public interface FilmRepository extends MongoRepository<Film, String> {
 
 	@Query(value="{\"title\" : {$regex : \"?0\"}}")
 	List<Film> findByTitle(String title);
-	@Query(value="{\"genres\" : {$regex : \"?0\"}}") 
+	@Query(value="{\"genres.name\" : {$regex : \"?0\"}}") 
 	List<Film> findByGenres(String genres);
 	List<Film> findByTitleAndGenres(String title, String genres);
 }

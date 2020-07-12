@@ -7,8 +7,46 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Arrays;
+
+import org.bson.BsonString;
+import org.bson.Document;
+
+import static com.mongodb.client.model.Aggregates.group;
+import static com.mongodb.client.model.Aggregates.unwind;
+import static com.mongodb.client.model.Accumulators.avg;
+
+import com.mongodb.AggregationOutput;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBObjectBuilder;
+import com.mongodb.CommandResult;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.BsonField;
+
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
+
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
+
+import java.util.concurrent.TimeUnit;
+import org.bson.Document;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.mongodb.core.DbCallback;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.Fields;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +54,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.DiVaioCifarelli.progetto_BD2.MongoConfig;
 import com.DiVaioCifarelli.progetto_BD2.model.Credits;
 import com.DiVaioCifarelli.progetto_BD2.model.Film;
 import com.DiVaioCifarelli.progetto_BD2.model.Genres;
@@ -55,13 +94,38 @@ public class FilmController {
 		  }
 	}
 	
+	public MongoOperations getMongoConnection() {
+		return (MongoOperations) new AnnotationConfigApplicationContext(MongoConfig.class)
+                .getBean("mongoTemplate");
+	}
+	
 	@GetMapping("/statics")
 	public ResponseEntity<List<ResultStatics>> produceStatics(@RequestParam(required = true) String axis, 
 			@RequestParam(required = false) String genere_1, @RequestParam(required = false) String genere_2,
 			@RequestParam(required = false) String genere_3, @RequestParam(required = false) String genere_4,
 			@RequestParam(required = false) String genere_5){
 		List<ResultStatics> value_return = new ArrayList<>();
-		System.out.println("statistiche");
+		List<String> generi_selezionati = new ArrayList<>();
+		
+		if(genere_1 != null) generi_selezionati.add(genere_1);
+		if(genere_2 != null) generi_selezionati.add(genere_2);
+		if(genere_3 != null) generi_selezionati.add(genere_3);
+		if(genere_4 != null) generi_selezionati.add(genere_4);
+		if(genere_5 != null) generi_selezionati.add(genere_5);
+		
+		MongoClient mongoClient = new MongoClient(
+    		    new MongoClientURI(
+    		        "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false"
+    		    )
+    		);
+    	MongoClient mongoClient1 = new MongoClient(
+    		    new MongoClientURI(
+    		        "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false"
+    		    )
+    		);
+		MongoDatabase database = mongoClient1.getDatabase("Prova");
+		MongoCollection<Document> collection = database.getCollection("Film_json");
+		
 		try {
 ////		    
 //			System.out.println(axis);
@@ -72,48 +136,27 @@ public class FilmController {
 //			System.out.println(genere_5);
 ////			
 		    if(axis.equals("vote_avg")) {
-		    	//calcolo voto medio per tutti i generi
-		    	if(genere_1 != null && !(genere_1.equals("null"))) {
-		    		value_return.add(calcStatsRateAvg(genere_1));
-		    	}
-		    	
-		    	if(genere_2 != null && !(genere_2.equals("null"))) { 
-		    		value_return.add(calcStatsRateAvg(genere_2));
-		    	}
-		    	
-		    	if(genere_3 != null && !(genere_3.equals("null"))) { 
-		    		value_return.add(calcStatsRateAvg(genere_3));
-		    	}
-		    	
-		    	if(genere_4 != null && !(genere_4.equals("null"))) { 
-		    		value_return.add(calcStatsRateAvg(genere_4));
-		    	}
-		    	
-		    	if(genere_5 != null && !(genere_5.equals("null"))) { 
-		    		value_return.add(calcStatsRateAvg(genere_5));
-		    	}
-		    	
+    	   		AggregateIterable<Document> result = collection.aggregate(Arrays.asList(new Document("$unwind", 
+    		    new Document("path", "$genres")), 
+    		    new Document("$group", 
+    		    new Document("_id", "$genres.name")
+    		            .append("avg_vote", 
+    		    new Document("$avg", "$vote_average")))));
+	    		value_return = retValues(generi_selezionati, result);
+	    		for(ResultStatics a : value_return) {
+	    			System.out.println("genere: " + a.getGenre() + " - avg: " + a.getAxis());
+	    		}	
 		    }else {
-		    	//calcolo incasso medio per tutti i generi
-		    	if(genere_1 != null && !(genere_1.equals("null"))) {
-		    		value_return.add(calcStatsRevAvg(genere_1));
-		    	}
-		    	
-		    	if(genere_2 != null && !(genere_2.equals("null"))) {
-		    		value_return.add(calcStatsRevAvg(genere_2));
-		    	}
-		    	
-		    	if(genere_3 != null && !(genere_3.equals("null"))) {
-		    		value_return.add(calcStatsRevAvg(genere_3));
-		    	}
-		    	
-		    	if(genere_4 != null && !(genere_4.equals("null"))) {
-		    		value_return.add(calcStatsRevAvg(genere_4));
-		    	}
-		    	
-		    	if(genere_5 != null && !(genere_5.equals("null"))) {
-		    		value_return.add(calcStatsRevAvg(genere_5));
-		    	}
+		    	AggregateIterable<Document> result = collection.aggregate(Arrays.asList(new Document("$unwind", 
+		    		    new Document("path", "$genres")), 
+		    		    new Document("$group", 
+		    		    new Document("_id", "$genres.name")
+		    		            .append("rev_avg", 
+		    		    new Document("$avg", "$revenue")))));
+		    	value_return = retValues_rev(generi_selezionati, result);
+	    		for(ResultStatics a : value_return) {
+	    			System.out.println("genere: " + a.getGenre() + " - avg_rev: " + a.getAxis());
+	    		}	
 		    	
 		    }
 		    if (value_return.isEmpty()) {
@@ -125,45 +168,40 @@ public class FilmController {
 		    }
 		  } catch (Exception e) {
 			  System.out.println("exception");
+			  System.out.println(e.getCause());
 		    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		  }
 	}
 	
-	public ResultStatics calcStatsRateAvg(String genere) {
-		ResultStatics object_return;
-		//chiamare il finder per tutti i generi effettuando i controlli
-    	List<Film> films = filmRepository.findByGenres(genere);
-    	List<Float> temp = new ArrayList<Float>();
-    	Float sum = new Float(0);
-    	for(Film f : films) {
-    		temp.add(Float.valueOf(f.getVote_average()));
-    	}
-    	for(Float d : temp) sum += d;
-    	
-    	String result = df.format((sum/temp.size()));
-    	//System.out.println("Media : " + result);
-    	
-    	object_return = new ResultStatics(genere, result);
-    	System.out.println(object_return.getGenre() + " - " + object_return.getAxis());
-		return object_return;
+
+	public List<ResultStatics> retValues(List<String> generi, AggregateIterable<Document> res_query) {
+		List<ResultStatics> temp_list = new ArrayList<>();
+		List<ResultStatics> results = new ArrayList<>();
+		ResultStatics temp;
+		Document doc_query;
+		for(Document d:res_query) {
+			if(generi.contains((String)d.get("_id"))) {
+				String fl = df.format((d.get("avg_vote")));
+				temp = new ResultStatics((String)d.get("_id"), fl);
+				results.add(temp);
+			}
+		}
+		return results;
 	}
 	
-	public ResultStatics calcStatsRevAvg(String genere) {
-		System.out.println("genere in funzione : " + genere );
-		ResultStatics object_return;
-		//chiamare il finder per tutti i generi effettuando i controlli
-    	List<Film> films = filmRepository.findByGenres(genere);
-    	List<Float> temp = new ArrayList<Float>();
-    	Float sum = new Float(0);
-    	for(Film f : films) {
-    		temp.add(Float.valueOf(f.getRevenue()));
-    	}
-    	for(Float d : temp) sum += d;
-    	
-    	String result = df.format((sum/temp.size()));
-    	
-    	object_return = new ResultStatics(genere, result);
-		return object_return;
+	public List<ResultStatics> retValues_rev(List<String> generi, AggregateIterable<Document> res_query) {
+		List<ResultStatics> temp_list = new ArrayList<>();
+		List<ResultStatics> results = new ArrayList<>();
+		ResultStatics temp;
+		Document doc_query;
+		for(Document d:res_query) {
+			if(generi.contains((String)d.get("_id"))) {
+				String fl = df.format((d.get("rev_avg")));
+				temp = new ResultStatics((String)d.get("_id"), fl);
+				results.add(temp);
+			}
+		}
+		return results;
 	}
 	
 	@GetMapping("/listFilm")

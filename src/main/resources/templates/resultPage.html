@@ -23,7 +23,7 @@
 		<th scope="col" style = "width: 100px">Production Companies</th>
 		<th scope="col" style = "width: 100px">Production Countries</th>
 		<th scope="col" style = "width: 100px">Release Date</th>
-		<th scope="col" style = "width: 100px">Votes_Avg</th>
+		<th scope="col" style = "width: 100px">Rate</th>
 	</tr>
 	</thead>
 	
@@ -77,17 +77,17 @@
 					for(var e in data){
 						item={};
 						item["Title"] = data[e].title;
-						var obj = JSON.parse(data[e].genres);
+						var obj = data[e].genres;
 						for(var o in obj){
 							elenco_genres.push(obj[o].name);
 						}
 						
-						var obj_comp = JSON.parse(data[e].production_companies);
+						var obj_comp = data[e].production_companies;
 						for(var o in obj_comp){
 							elenco_comp.push(obj_comp[o].name);
 						}
 						
-						var obj_count = JSON.parse(data[e].production_countries);
+						var obj_count = data[e].production_countries;
 						for(var o in obj_count){
 							elenco_count.push(obj_count[o].name);
 						}

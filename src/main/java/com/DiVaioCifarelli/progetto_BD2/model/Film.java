@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="Film")
+@Document(collection="Film_json")
 public class Film {
 
 //	Elenco attributi del documento Film

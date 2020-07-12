@@ -17,7 +17,7 @@ public class MongoConfig{
 
         MongoClient mongoClient = new MongoClient("127.0.0.1:27017");
 
-        return new SimpleMongoDbFactory(mongoClient, "ProgettoDB2" );
+        return new SimpleMongoDbFactory(mongoClient, "Prova" );
     }
 
     @Bean
